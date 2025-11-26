@@ -1,6 +1,6 @@
-# Sistema de Visualización de Indicadores de Adicciones
+# Sistema de Visualización de Indicadores de Adicciones - Córdoba
 
-Sistema dockerizado para visualizar indicadores de la secretaría de adicciones en mapas geográficos, con capacidad de definir zonas geográficas, generar mapas de calor y cruzar datos censales con datos de consumo/tratamiento.
+Sistema dockerizado para visualizar indicadores de la secretaría de adicciones en mapas geográficos de la Provincia de Córdoba, Argentina. Permite definir zonas geográficas, generar mapas de calor y cruzar datos censales con datos de consumo/tratamiento.
 
 ## 🎯 Características
 
@@ -8,6 +8,8 @@ Sistema dockerizado para visualizar indicadores de la secretaría de adicciones 
 - **GeoServer**: Servidor de mapas para publicar capas WMS/WFS
 - **Kepler.gl**: Visualización interactiva de mapas de calor
 - **pgAdmin**: Interfaz web para administrar la base de datos
+- **Datos de Córdoba**: 26 departamentos, 14 regiones sanitarias y más de 50 localidades precargadas
+- **Geocodificación**: Script Python para geocodificar localidades de Córdoba
 
 ## 📋 Requisitos Previos
 
@@ -20,7 +22,7 @@ Sistema dockerizado para visualizar indicadores de la secretaría de adicciones 
 
 ```bash
 # 1. Clonar el repositorio
-git clone https://github.com/tu-usuario/mapa-indicadores.git
+git clone https://github.com/fran1599/mapa-indicadores.git
 cd mapa-indicadores
 
 # 2. Copiar archivo de configuración
@@ -32,8 +34,9 @@ docker-compose up -d
 # 4. Verificar que los servicios estén corriendo
 docker-compose ps
 
-# 5. Cargar datos de ejemplo (opcional)
-./scripts/load-sample-data.sh
+# 5. Cargar datos de Córdoba
+chmod +x scripts/cargar_datos.sh
+./scripts/cargar_datos.sh
 ```
 
 ## 🌐 URLs de Acceso
@@ -65,35 +68,72 @@ docker-compose ps
 ## 📁 Estructura del Proyecto
 
 ```
-├── docker-compose.yml      # Configuración de servicios Docker
-├── README.md               # Este archivo
-├── .env.example            # Plantilla de variables de entorno
-├── .gitignore              # Archivos ignorados por Git
+├── docker-compose.yml          # Configuración de servicios Docker
+├── README.md                   # Este archivo
+├── .env.example                # Plantilla de variables de entorno
+├── .gitignore                  # Archivos ignorados por Git
+│
 ├── data/
+│   ├── cordoba/
+│   │   ├── departamentos.geojson     # 26 departamentos de Córdoba
+│   │   ├── localidades.csv           # Localidades con coordenadas
+│   │   └── regiones_sanitarias.geojson  # 14 regiones sanitarias
 │   ├── provincias_argentina.geojson  # Geometrías de provincias
-│   └── datos_ejemplo.csv             # Datos de ejemplo
+│   └── ejemplo_indicadores.csv       # Datos de ejemplo
+│
 ├── scripts/
-│   ├── init-db.sql         # Esquema inicial de la base de datos
-│   └── load-sample-data.sh # Script para cargar datos de ejemplo
+│   ├── init-db.sql             # Esquema inicial de la base de datos
+│   ├── geocodificar.py         # Script de geocodificación
+│   ├── cargar_datos.sh         # Cargar datos de Córdoba
+│   └── load-sample-data.sh     # Cargar datos de ejemplo general
+│
 └── docs/
-    ├── SETUP.md            # Guía detallada de instalación
-    └── USO.md              # Guía de uso del sistema
+    ├── SETUP.md                # Guía detallada de instalación
+    ├── USO.md                  # Guía de uso del sistema
+    └── FUENTES_DATOS.md        # Enlaces a fuentes oficiales
 ```
 
 ## 🗄️ Estructura de la Base de Datos
 
 ### Tablas Principales
 
-- **zonas_geograficas**: Provincias, departamentos y localidades con geometrías
+- **zonas_geograficas**: Provincias, departamentos, regiones sanitarias y barrios con geometrías
+- **localidades**: Localidades con coordenadas puntuales (lat/lon)
 - **datos_censo**: Información censal por zona y año
-- **indicadores_adicciones**: Indicadores de consumo, tratamiento y prevención
-- **centros_atencion**: Ubicación de centros de atención
+- **indicadores_adicciones**: Indicadores de consumo, tratamiento, prevención y consultas
+- **centros_atencion**: Ubicación de centros de atención (hospitales, CPA, comunidades terapéuticas)
 
 ### Funciones Disponibles
 
 - `encontrar_zona(punto)`: Encuentra la zona geográfica de un punto
 - `estadisticas_zona(zona_id, fecha_inicio, fecha_fin)`: Estadísticas por zona
 - `indicadores_cercanos(punto, radio, limite)`: Indicadores cerca de un punto
+
+## 🗺️ Datos de Córdoba Incluidos
+
+### Departamentos (26)
+Capital, Río Cuarto, San Justo, Punilla, Colón, General San Martín, Tercero Arriba, Río Segundo, Marcos Juárez, Unión, General Roca, Juárez Celman, Presidente Roque Sáenz Peña, Santa María, Cruz del Eje, San Alberto, Calamuchita, Río Primero, Totoral, Ischilín, Tulumba, Sobremonte, Río Seco, Pocho, Minas, San Javier
+
+### Regiones Sanitarias (14)
+Capital, Punilla, Colón, Norte, Cruz del Eje, Traslasierra, Santa María, Río Segundo, Tercero Arriba, San Justo, Unión, General San Martín, Río Cuarto, Sur
+
+### Localidades (55+)
+Córdoba, Río Cuarto, Villa María, San Francisco, Carlos Paz, Alta Gracia, Río Tercero, Jesús María, Bell Ville, Cruz del Eje, y más...
+
+## 📍 Geocodificación
+
+El script `geocodificar.py` permite agregar coordenadas a archivos CSV con localidades de Córdoba:
+
+```bash
+# Geocodificar archivo CSV
+python scripts/geocodificar.py --input datos.csv --columna localidad --output datos_geo.csv
+
+# Ver localidades disponibles
+python scripts/geocodificar.py --listar-localidades
+
+# Usar solo base de datos local (sin consultas a Internet)
+python scripts/geocodificar.py --input datos.csv --columna ciudad --output datos_geo.csv --solo-local
+```
 
 ## 🔧 Comandos Útiles
 
@@ -110,14 +150,34 @@ docker-compose restart postgis
 # Acceder a la base de datos
 docker exec -it gis_postgis psql -U gisuser -d gis_adicciones
 
-# Ejecutar consulta SQL
-docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c "SELECT * FROM zonas_geograficas;"
+# Consultar departamentos de Córdoba
+docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c \
+  "SELECT nombre, tipo FROM zonas_geograficas WHERE tipo = 'departamento';"
+
+# Consultar localidades
+docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c \
+  "SELECT nombre, departamento, poblacion FROM localidades ORDER BY poblacion DESC LIMIT 10;"
 ```
+
+## 🔥 Crear Mapa de Calor en Kepler.gl
+
+1. Exportar datos con coordenadas desde PostGIS:
+   ```sql
+   SELECT l.nombre, l.latitud, l.longitud, i.tipo_indicador, i.valor
+   FROM indicadores_adicciones i
+   JOIN localidades l ON i.localidad_id = l.id;
+   ```
+2. Guardar como CSV
+3. Abrir http://localhost:8081
+4. Arrastrar el archivo CSV
+5. Cambiar tipo de capa a "Heatmap"
+6. Configurar peso por columna `valor`
 
 ## 📖 Documentación Adicional
 
 - [Guía de Instalación Detallada](docs/SETUP.md)
 - [Guía de Uso](docs/USO.md)
+- [Fuentes de Datos Oficiales](docs/FUENTES_DATOS.md)
 
 ## 🔜 Próximos Pasos Sugeridos
 

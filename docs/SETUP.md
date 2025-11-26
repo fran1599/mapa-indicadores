@@ -1,6 +1,6 @@
 # Guía de Instalación Detallada
 
-Esta guía proporciona instrucciones completas para instalar y configurar el sistema de visualización de indicadores de adicciones.
+Esta guía proporciona instrucciones completas para instalar y configurar el sistema de visualización de indicadores de adicciones para la Provincia de Córdoba.
 
 ## Requisitos del Sistema
 
@@ -15,6 +15,7 @@ Esta guía proporciona instrucciones completas para instalar y configurar el sis
 - Docker Engine 20.10 o superior
 - Docker Compose 2.0 o superior
 - Git (para clonar el repositorio)
+- Python 3.8+ (opcional, para geocodificación)
 
 ## Instalación de Docker
 
@@ -131,7 +132,24 @@ docker-compose ps
 # gis_pgadmin     Up                       0.0.0.0:5050->80/tcp
 ```
 
-### 5. Cargar Datos de Ejemplo (Opcional)
+### 5. Cargar Datos de Córdoba
+
+```bash
+# Dar permisos de ejecución al script
+chmod +x scripts/cargar_datos.sh
+
+# Ejecutar carga de datos de Córdoba
+./scripts/cargar_datos.sh
+```
+
+Este script carga:
+- 26 departamentos de Córdoba
+- 14 regiones sanitarias
+- 55+ localidades con coordenadas
+- Datos de ejemplo de indicadores
+- Datos censales de muestra
+
+### 6. Cargar Datos de Ejemplo General (Opcional)
 
 ```bash
 # Dar permisos de ejecución al script

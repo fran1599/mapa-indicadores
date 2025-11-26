@@ -1,0 +1,402 @@
+{
+  "type": "FeatureCollection",
+  "name": "departamentos_cordoba",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14007",
+        "nombre": "Capital",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 1330023,
+        "cabecera": "Córdoba"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.30, -31.30], [-64.30, -31.50], [-64.10, -31.50], [-64.10, -31.30], [-64.30, -31.30]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14014",
+        "nombre": "Río Cuarto",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 246393,
+        "cabecera": "Río Cuarto"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.80, -32.80], [-64.80, -33.50], [-63.80, -33.50], [-63.80, -32.80], [-64.80, -32.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14021",
+        "nombre": "San Justo",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 206307,
+        "cabecera": "San Francisco"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-62.50, -30.80], [-62.50, -31.80], [-61.80, -31.80], [-61.80, -30.80], [-62.50, -30.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14028",
+        "nombre": "Punilla",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 178401,
+        "cabecera": "Cosquín"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.70, -30.80], [-64.70, -31.40], [-64.30, -31.40], [-64.30, -30.80], [-64.70, -30.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14035",
+        "nombre": "Colón",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 225151,
+        "cabecera": "Jesús María"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.40, -30.80], [-64.40, -31.30], [-63.90, -31.30], [-63.90, -30.80], [-64.40, -30.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14042",
+        "nombre": "General San Martín",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 127454,
+        "cabecera": "Villa María"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.60, -32.20], [-63.60, -32.60], [-62.90, -32.60], [-62.90, -32.20], [-63.60, -32.20]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14049",
+        "nombre": "Tercero Arriba",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 109554,
+        "cabecera": "Río Tercero"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.30, -32.00], [-64.30, -32.50], [-63.70, -32.50], [-63.70, -32.00], [-64.30, -32.00]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14056",
+        "nombre": "Río Segundo",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 103718,
+        "cabecera": "Villa del Rosario"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.60, -31.40], [-63.60, -32.00], [-62.90, -32.00], [-62.90, -31.40], [-63.60, -31.40]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14063",
+        "nombre": "Marcos Juárez",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 104205,
+        "cabecera": "Marcos Juárez"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-62.80, -32.40], [-62.80, -33.20], [-62.00, -33.20], [-62.00, -32.40], [-62.80, -32.40]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14070",
+        "nombre": "Unión",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 105727,
+        "cabecera": "Bell Ville"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.00, -32.50], [-63.00, -33.20], [-62.20, -33.20], [-62.20, -32.50], [-63.00, -32.50]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14077",
+        "nombre": "General Roca",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 35645,
+        "cabecera": "Villa Huidobro"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.00, -33.80], [-65.00, -34.80], [-64.00, -34.80], [-64.00, -33.80], [-65.00, -33.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14084",
+        "nombre": "Juárez Celman",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 61078,
+        "cabecera": "La Carlota"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.80, -33.00], [-63.80, -33.60], [-62.90, -33.60], [-62.90, -33.00], [-63.80, -33.00]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14091",
+        "nombre": "Presidente Roque Sáenz Peña",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 36391,
+        "cabecera": "Laboulaye"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.60, -33.60], [-63.60, -34.40], [-62.80, -34.40], [-62.80, -33.60], [-63.60, -33.60]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14098",
+        "nombre": "Santa María",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 96370,
+        "cabecera": "Alta Gracia"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.50, -31.50], [-64.50, -32.20], [-63.90, -32.20], [-63.90, -31.50], [-64.50, -31.50]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14105",
+        "nombre": "Cruz del Eje",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 58759,
+        "cabecera": "Cruz del Eje"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.30, -30.40], [-65.30, -31.10], [-64.50, -31.10], [-64.50, -30.40], [-65.30, -30.40]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14112",
+        "nombre": "San Alberto",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 36308,
+        "cabecera": "Villa Cura Brochero"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.10, -31.40], [-65.10, -32.00], [-64.50, -32.00], [-64.50, -31.40], [-65.10, -31.40]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14119",
+        "nombre": "Calamuchita",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 54730,
+        "cabecera": "San Agustín"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.80, -31.80], [-64.80, -32.50], [-64.20, -32.50], [-64.20, -31.80], [-64.80, -31.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14126",
+        "nombre": "Río Primero",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 46675,
+        "cabecera": "Santa Rosa de Río Primero"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.70, -30.80], [-63.70, -31.50], [-63.00, -31.50], [-63.00, -30.80], [-63.70, -30.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14133",
+        "nombre": "Totoral",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 18556,
+        "cabecera": "Villa del Totoral"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.10, -30.50], [-64.10, -31.00], [-63.50, -31.00], [-63.50, -30.50], [-64.10, -30.50]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14140",
+        "nombre": "Ischilín",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 31312,
+        "cabecera": "Deán Funes"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.60, -30.10], [-64.60, -30.70], [-64.00, -30.70], [-64.00, -30.10], [-64.60, -30.10]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14147",
+        "nombre": "Tulumba",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 12571,
+        "cabecera": "Villa Tulumba"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.00, -29.80], [-64.00, -30.60], [-63.30, -30.60], [-63.30, -29.80], [-64.00, -29.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14154",
+        "nombre": "Sobremonte",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 4611,
+        "cabecera": "San Francisco del Chañar"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.20, -29.50], [-64.20, -30.10], [-63.60, -30.10], [-63.60, -29.50], [-64.20, -29.50]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14161",
+        "nombre": "Río Seco",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 13242,
+        "cabecera": "Villa de María"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.50, -29.60], [-63.50, -30.40], [-62.80, -30.40], [-62.80, -29.60], [-63.50, -29.60]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14168",
+        "nombre": "Pocho",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 5380,
+        "cabecera": "Salsacate"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.40, -31.00], [-65.40, -31.60], [-64.80, -31.60], [-64.80, -31.00], [-65.40, -31.00]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14175",
+        "nombre": "Minas",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 4727,
+        "cabecera": "San Carlos Minas"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.30, -30.80], [-65.30, -31.30], [-64.70, -31.30], [-64.70, -30.80], [-65.30, -30.80]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "14182",
+        "nombre": "San Javier",
+        "provincia": "Córdoba",
+        "codigo_provincia": "AR-X",
+        "poblacion": 53520,
+        "cabecera": "Villa Dolores"
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.40, -31.60], [-65.40, -32.40], [-64.80, -32.40], [-64.80, -31.60], [-65.40, -31.60]]]]
+      }
+    }
+  ]
+}

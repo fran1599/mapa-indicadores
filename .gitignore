@@ -5,6 +5,10 @@
 postgis_data/
 geoserver_data/
 pgadmin_data/
+volumes/
+
+# Datos subidos por usuarios
+data/uploads/
 
 # Archivos temporales
 *.tmp
