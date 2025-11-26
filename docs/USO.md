@@ -1,15 +1,17 @@
 # Guía de Uso del Sistema
 
-Esta guía explica cómo utilizar el sistema de visualización de indicadores de adicciones para cargar datos, crear visualizaciones y ejecutar análisis espaciales.
+Esta guía explica cómo utilizar el sistema de visualización de indicadores de adicciones para la Provincia de Córdoba. Incluye instrucciones para cargar datos, crear visualizaciones y ejecutar análisis espaciales.
 
 ## Índice
 
 1. [Acceso a los Servicios](#acceso-a-los-servicios)
-2. [Cargar Datos Geográficos](#cargar-datos-geográficos)
-3. [Crear Mapas de Calor en Kepler.gl](#crear-mapas-de-calor-en-keplergl)
-4. [Publicar Capas en GeoServer](#publicar-capas-en-geoserver)
-5. [Consultas Espaciales en PostGIS](#consultas-espaciales-en-postgis)
-6. [Ejemplos de Análisis](#ejemplos-de-análisis)
+2. [Datos de Córdoba Incluidos](#datos-de-córdoba-incluidos)
+3. [Geocodificación de Localidades](#geocodificación-de-localidades)
+4. [Cargar Datos Geográficos](#cargar-datos-geográficos)
+5. [Crear Mapas de Calor en Kepler.gl](#crear-mapas-de-calor-en-keplergl)
+6. [Publicar Capas en GeoServer](#publicar-capas-en-geoserver)
+7. [Consultas Espaciales en PostGIS](#consultas-espaciales-en-postgis)
+8. [Ejemplos de Análisis para Córdoba](#ejemplos-de-análisis-para-córdoba)
 
 ---
 
@@ -42,6 +44,93 @@ Esta guía explica cómo utilizar el sistema de visualización de indicadores de
 
 1. Abrir http://localhost:8081
 2. No requiere autenticación
+
+---
+
+## Datos de Córdoba Incluidos
+
+El sistema incluye datos geográficos precargados de la Provincia de Córdoba:
+
+### Departamentos (26)
+
+Consultar los departamentos cargados:
+
+```sql
+SELECT nombre, codigo FROM zonas_geograficas 
+WHERE tipo = 'departamento' AND codigo_padre = 'AR-X'
+ORDER BY nombre;
+```
+
+### Regiones Sanitarias (14)
+
+```sql
+SELECT nombre, codigo FROM zonas_geograficas 
+WHERE tipo = 'region_sanitaria'
+ORDER BY codigo;
+```
+
+### Localidades (55+)
+
+```sql
+SELECT nombre, departamento, poblacion, latitud, longitud 
+FROM localidades 
+ORDER BY poblacion DESC;
+```
+
+---
+
+## Geocodificación de Localidades
+
+El script `geocodificar.py` permite agregar coordenadas geográficas a archivos CSV:
+
+### Uso Básico
+
+```bash
+# Geocodificar archivo CSV
+python scripts/geocodificar.py \
+    --input datos.csv \
+    --columna localidad \
+    --output datos_geo.csv
+```
+
+### Opciones Disponibles
+
+```bash
+# Ver todas las localidades en la base de datos local
+python scripts/geocodificar.py --listar-localidades
+
+# Usar solo base de datos local (sin consultas a Internet)
+python scripts/geocodificar.py \
+    --input datos.csv \
+    --columna ciudad \
+    --output datos_geo.csv \
+    --solo-local
+
+# Usar delimitador diferente (ej: punto y coma)
+python scripts/geocodificar.py \
+    --input datos.csv \
+    --columna localidad \
+    --output datos_geo.csv \
+    --delimitador ";"
+```
+
+### Ejemplo de Archivo de Entrada
+
+```csv
+id,paciente,localidad,fecha
+1,Juan Pérez,Córdoba,2024-01-15
+2,María García,Río Cuarto,2024-01-16
+3,Carlos López,Villa María,2024-01-17
+```
+
+### Resultado de Salida
+
+```csv
+id,paciente,localidad,fecha,latitud,longitud,fuente_geocodificacion
+1,Juan Pérez,Córdoba,2024-01-15,-31.4201,-64.1888,local
+2,María García,Río Cuarto,2024-01-16,-33.1307,-64.3499,local
+3,Carlos López,Villa María,2024-01-17,-32.4074,-63.2429,local
+```
 
 ---
 
@@ -307,7 +396,57 @@ FROM zonas_geograficas;
 
 ---
 
-## Ejemplos de Análisis
+## Ejemplos de Análisis para Córdoba
+
+### Consultar indicadores por localidad de Córdoba
+
+```sql
+-- Indicadores agrupados por localidad
+SELECT 
+  l.nombre as localidad,
+  l.departamento,
+  i.tipo_indicador,
+  COUNT(i.id) as cantidad,
+  SUM(i.valor) as total
+FROM indicadores_adicciones i
+JOIN localidades l ON i.localidad_id = l.id
+GROUP BY l.nombre, l.departamento, i.tipo_indicador
+ORDER BY total DESC;
+```
+
+### Análisis por departamento de Córdoba
+
+```sql
+-- Resumen de indicadores por departamento
+SELECT 
+  z.nombre as departamento,
+  dc.poblacion_total,
+  COUNT(i.id) as total_indicadores,
+  SUM(i.valor) as suma_valores,
+  ROUND((SUM(i.valor) / NULLIF(dc.poblacion_total, 0) * 10000)::numeric, 2) as tasa_por_10000
+FROM zonas_geograficas z
+LEFT JOIN datos_censo dc ON z.id = dc.zona_id AND dc.anio = 2022
+LEFT JOIN indicadores_adicciones i ON z.id = i.zona_id
+WHERE z.tipo = 'departamento' AND z.codigo_padre = 'AR-X'
+GROUP BY z.nombre, dc.poblacion_total
+ORDER BY tasa_por_10000 DESC NULLS LAST;
+```
+
+### Análisis por región sanitaria
+
+```sql
+-- Indicadores por región sanitaria
+SELECT 
+  z.nombre as region_sanitaria,
+  i.tipo_indicador,
+  COUNT(i.id) as cantidad,
+  SUM(i.valor) as total
+FROM zonas_geograficas z
+LEFT JOIN indicadores_adicciones i ON z.id = i.zona_id
+WHERE z.tipo = 'region_sanitaria'
+GROUP BY z.nombre, i.tipo_indicador
+ORDER BY z.nombre, i.tipo_indicador;
+```
 
 ### Cruzar datos censales con indicadores
 
@@ -343,21 +482,23 @@ GROUP BY DATE_TRUNC('month', fecha), tipo_indicador
 ORDER BY mes, tipo_indicador;
 ```
 
-### Identificar zonas críticas
+### Identificar localidades críticas en Córdoba
 
 ```sql
--- Top 10 zonas con más indicadores de consumo
+-- Top 10 localidades con más indicadores de consumo
 SELECT 
-  z.nombre,
-  z.tipo,
+  l.nombre as localidad,
+  l.departamento,
+  l.poblacion,
   COUNT(i.id) as cantidad_indicadores,
   SUM(i.valor) as valor_total,
+  ROUND((SUM(i.valor) / NULLIF(l.poblacion, 0) * 10000)::numeric, 2) as tasa_por_10000,
   MAX(i.fecha) as ultimo_registro
-FROM zonas_geograficas z
-JOIN indicadores_adicciones i ON z.id = i.zona_id
+FROM localidades l
+JOIN indicadores_adicciones i ON l.id = i.localidad_id
 WHERE i.tipo_indicador = 'consumo'
-GROUP BY z.id, z.nombre, z.tipo
-ORDER BY valor_total DESC
+GROUP BY l.id, l.nombre, l.departamento, l.poblacion
+ORDER BY tasa_por_10000 DESC NULLS LAST
 LIMIT 10;
 ```
 
@@ -384,7 +525,7 @@ ORDER BY distancia_centro_mas_cercano_km DESC;
 ### Exportar resultados para visualización
 
 ```sql
--- Generar GeoJSON de zonas con estadísticas
+-- Generar GeoJSON de departamentos de Córdoba con estadísticas
 SELECT json_build_object(
   'type', 'FeatureCollection',
   'features', json_agg(
@@ -396,7 +537,8 @@ SELECT json_build_object(
         'codigo', z.codigo,
         'indicadores_consumo', COALESCE(stats.consumo, 0),
         'indicadores_tratamiento', COALESCE(stats.tratamiento, 0),
-        'indicadores_prevencion', COALESCE(stats.prevencion, 0)
+        'indicadores_prevencion', COALESCE(stats.prevencion, 0),
+        'indicadores_consulta', COALESCE(stats.consulta, 0)
       )
     )
   )
@@ -407,11 +549,33 @@ LEFT JOIN (
     zona_id,
     SUM(CASE WHEN tipo_indicador = 'consumo' THEN valor ELSE 0 END) as consumo,
     SUM(CASE WHEN tipo_indicador = 'tratamiento' THEN valor ELSE 0 END) as tratamiento,
-    SUM(CASE WHEN tipo_indicador = 'prevencion' THEN valor ELSE 0 END) as prevencion
+    SUM(CASE WHEN tipo_indicador = 'prevencion' THEN valor ELSE 0 END) as prevencion,
+    SUM(CASE WHEN tipo_indicador = 'consulta' THEN valor ELSE 0 END) as consulta
   FROM indicadores_adicciones
   GROUP BY zona_id
 ) stats ON z.id = stats.zona_id
-WHERE z.tipo = 'provincia';
+WHERE z.tipo = 'departamento' AND z.codigo_padre = 'AR-X';
+```
+
+### Exportar localidades para Kepler.gl
+
+```sql
+-- CSV de localidades con indicadores para mapa de calor
+COPY (
+  SELECT 
+    l.nombre as localidad,
+    l.departamento,
+    l.latitud,
+    l.longitud,
+    i.tipo_indicador,
+    i.subtipo,
+    i.valor,
+    i.fecha,
+    i.descripcion
+  FROM indicadores_adicciones i
+  JOIN localidades l ON i.localidad_id = l.id
+  ORDER BY i.fecha DESC
+) TO '/tmp/indicadores_cordoba.csv' WITH CSV HEADER;
 ```
 
 ---
@@ -459,7 +623,27 @@ docker exec gis_postgis psql -U gisuser -d gis_adicciones -c "
 
 ## Recursos Adicionales
 
+### Documentación Técnica
+
 - [Documentación de PostGIS](https://postgis.net/documentation/)
 - [Documentación de GeoServer](https://docs.geoserver.org/)
 - [Documentación de Kepler.gl](https://docs.kepler.gl/)
 - [Tutorial de SQL espacial](https://postgis.net/workshops/postgis-intro/)
+
+### Fuentes de Datos de Córdoba
+
+Consultar el archivo [FUENTES_DATOS.md](FUENTES_DATOS.md) para:
+
+- IDECOR - Infraestructura de Datos Espaciales de Córdoba
+- Estadística Córdoba - Portal de datos estadísticos
+- OpenDataCordoba - Datos abiertos colaborativos
+- Mapas Córdoba - Regiones sanitarias y efectores de salud
+- IGN Argentina - Capas SIG nacionales
+
+### Soporte
+
+Para problemas o consultas:
+
+1. Revisar la [Guía de Instalación](SETUP.md) para solución de problemas comunes
+2. Consultar los logs: `docker-compose logs -f`
+3. Abrir un issue en el repositorio de GitHub

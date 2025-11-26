@@ -7,13 +7,13 @@ CREATE EXTENSION IF NOT EXISTS postgis_topology;
 
 -- ============================================================================
 -- TABLA: zonas_geograficas
--- Almacena las divisiones geográficas (provincias, departamentos, localidades)
+-- Almacena las divisiones geográficas (provincias, departamentos, regiones sanitarias, barrios, localidades)
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS zonas_geograficas (
     id SERIAL PRIMARY KEY,
-    codigo VARCHAR(20) UNIQUE NOT NULL,
-    nombre VARCHAR(100) NOT NULL,
-    tipo VARCHAR(20) NOT NULL CHECK (tipo IN ('provincia', 'departamento', 'localidad')),
+    codigo VARCHAR(20) UNIQUE,
+    nombre VARCHAR(200) NOT NULL,
+    tipo VARCHAR(50) NOT NULL, -- 'provincia', 'departamento', 'region_sanitaria', 'barrio', 'localidad'
     codigo_padre VARCHAR(20),
     geom GEOMETRY(MULTIPOLYGON, 4326),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -21,9 +21,31 @@ CREATE TABLE IF NOT EXISTS zonas_geograficas (
 );
 
 -- Índice espacial para búsquedas geográficas eficientes
-CREATE INDEX IF NOT EXISTS idx_zonas_geograficas_geom ON zonas_geograficas USING GIST (geom);
+CREATE INDEX IF NOT EXISTS idx_zonas_geom ON zonas_geograficas USING GIST (geom);
 CREATE INDEX IF NOT EXISTS idx_zonas_geograficas_tipo ON zonas_geograficas (tipo);
 CREATE INDEX IF NOT EXISTS idx_zonas_geograficas_codigo ON zonas_geograficas (codigo);
+
+-- ============================================================================
+-- TABLA: localidades
+-- Almacena localidades con coordenadas puntuales
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS localidades (
+    id SERIAL PRIMARY KEY,
+    codigo VARCHAR(20),
+    nombre VARCHAR(200) NOT NULL,
+    departamento VARCHAR(200),
+    latitud DECIMAL(10,6),
+    longitud DECIMAL(10,6),
+    ubicacion GEOMETRY(POINT, 4326),
+    poblacion INTEGER,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Índice espacial para localidades
+CREATE INDEX IF NOT EXISTS idx_localidades_ubicacion ON localidades USING GIST (ubicacion);
+CREATE INDEX IF NOT EXISTS idx_localidades_nombre ON localidades (nombre);
+CREATE INDEX IF NOT EXISTS idx_localidades_departamento ON localidades (departamento);
 
 -- ============================================================================
 -- TABLA: datos_censo
@@ -31,7 +53,7 @@ CREATE INDEX IF NOT EXISTS idx_zonas_geograficas_codigo ON zonas_geograficas (co
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS datos_censo (
     id SERIAL PRIMARY KEY,
-    zona_id INTEGER NOT NULL REFERENCES zonas_geograficas(id) ON DELETE CASCADE,
+    zona_id INTEGER REFERENCES zonas_geograficas(id) ON DELETE CASCADE,
     anio INTEGER NOT NULL,
     poblacion_total INTEGER,
     poblacion_masculina INTEGER,
@@ -48,14 +70,16 @@ CREATE INDEX IF NOT EXISTS idx_datos_censo_anio ON datos_censo (anio);
 
 -- ============================================================================
 -- TABLA: indicadores_adicciones
--- Almacena indicadores relacionados con adicciones por zona y fecha
+-- Almacena indicadores relacionados con adicciones por zona/localidad y fecha
 -- ============================================================================
 CREATE TABLE IF NOT EXISTS indicadores_adicciones (
     id SERIAL PRIMARY KEY,
-    zona_id INTEGER NOT NULL REFERENCES zonas_geograficas(id) ON DELETE CASCADE,
+    localidad_id INTEGER REFERENCES localidades(id) ON DELETE SET NULL,
+    zona_id INTEGER REFERENCES zonas_geograficas(id) ON DELETE SET NULL,
     fecha DATE NOT NULL,
-    tipo_indicador VARCHAR(30) NOT NULL CHECK (tipo_indicador IN ('consumo', 'tratamiento', 'prevencion')),
-    valor NUMERIC(12, 2) NOT NULL,
+    tipo_indicador VARCHAR(100), -- 'consumo', 'tratamiento', 'prevencion', 'consulta'
+    subtipo VARCHAR(100),
+    valor DECIMAL(10,2),
     descripcion TEXT,
     ubicacion GEOMETRY(POINT, 4326),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -63,6 +87,7 @@ CREATE TABLE IF NOT EXISTS indicadores_adicciones (
 );
 
 -- Índices para búsquedas eficientes
+CREATE INDEX IF NOT EXISTS idx_indicadores_localidad ON indicadores_adicciones (localidad_id);
 CREATE INDEX IF NOT EXISTS idx_indicadores_zona ON indicadores_adicciones (zona_id);
 CREATE INDEX IF NOT EXISTS idx_indicadores_fecha ON indicadores_adicciones (fecha);
 CREATE INDEX IF NOT EXISTS idx_indicadores_tipo ON indicadores_adicciones (tipo_indicador);
@@ -75,9 +100,10 @@ CREATE INDEX IF NOT EXISTS idx_indicadores_ubicacion ON indicadores_adicciones U
 CREATE TABLE IF NOT EXISTS centros_atencion (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(200) NOT NULL,
-    direccion VARCHAR(300),
+    direccion TEXT,
+    localidad VARCHAR(200),
     telefono VARCHAR(50),
-    tipo VARCHAR(50) NOT NULL,
+    tipo VARCHAR(100), -- 'hospital', 'centro_salud', 'CPA', 'comunidad_terapeutica'
     ubicacion GEOMETRY(POINT, 4326),
     zona_id INTEGER REFERENCES zonas_geograficas(id) ON DELETE SET NULL,
     activo BOOLEAN DEFAULT TRUE,
@@ -99,14 +125,16 @@ CREATE OR REPLACE FUNCTION encontrar_zona(punto GEOMETRY)
 RETURNS TABLE(zona_id INTEGER, zona_nombre VARCHAR, zona_tipo VARCHAR) AS $$
 BEGIN
     RETURN QUERY
-    SELECT z.id, z.nombre, z.tipo
+    SELECT z.id, z.nombre::VARCHAR, z.tipo::VARCHAR
     FROM zonas_geograficas z
     WHERE ST_Contains(z.geom, punto)
     ORDER BY 
         CASE z.tipo 
             WHEN 'localidad' THEN 1 
-            WHEN 'departamento' THEN 2 
-            WHEN 'provincia' THEN 3 
+            WHEN 'barrio' THEN 2
+            WHEN 'departamento' THEN 3 
+            WHEN 'region_sanitaria' THEN 4
+            WHEN 'provincia' THEN 5 
         END;
 END;
 $$ LANGUAGE plpgsql;
@@ -184,6 +212,27 @@ LEFT JOIN datos_censo dc ON z.id = dc.zona_id AND dc.anio = (
     SELECT MAX(anio) FROM datos_censo WHERE zona_id = z.id
 )
 WHERE z.tipo = 'provincia'
+GROUP BY z.id, z.codigo, z.nombre, z.geom, dc.poblacion_total;
+
+-- Vista para resumen de indicadores por departamento de Córdoba
+CREATE OR REPLACE VIEW vista_resumen_departamentos_cordoba AS
+SELECT 
+    z.id as zona_id,
+    z.codigo,
+    z.nombre as departamento,
+    z.geom,
+    COUNT(i.id) as total_indicadores,
+    SUM(CASE WHEN i.tipo_indicador = 'consumo' THEN 1 ELSE 0 END) as indicadores_consumo,
+    SUM(CASE WHEN i.tipo_indicador = 'tratamiento' THEN 1 ELSE 0 END) as indicadores_tratamiento,
+    SUM(CASE WHEN i.tipo_indicador = 'prevencion' THEN 1 ELSE 0 END) as indicadores_prevencion,
+    SUM(CASE WHEN i.tipo_indicador = 'consulta' THEN 1 ELSE 0 END) as indicadores_consulta,
+    dc.poblacion_total as poblacion_ultimo_censo
+FROM zonas_geograficas z
+LEFT JOIN indicadores_adicciones i ON z.id = i.zona_id
+LEFT JOIN datos_censo dc ON z.id = dc.zona_id AND dc.anio = (
+    SELECT MAX(anio) FROM datos_censo WHERE zona_id = z.id
+)
+WHERE z.tipo = 'departamento' AND z.codigo_padre = 'AR-X'
 GROUP BY z.id, z.codigo, z.nombre, z.geom, dc.poblacion_total;
 
 -- Mensaje de confirmación

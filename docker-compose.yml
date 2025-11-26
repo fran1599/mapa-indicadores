@@ -26,6 +26,7 @@ services:
     image: kartoza/geoserver:2.23.0
     container_name: gis_geoserver
     environment:
+      GEOSERVER_ADMIN_USER: ${GEOSERVER_ADMIN_USER:-admin}
       GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_ADMIN_PASSWORD:-admin123}
       GEOSERVER_DATA_DIR: /opt/geoserver/data_dir
     ports:

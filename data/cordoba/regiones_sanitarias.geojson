@@ -1,0 +1,222 @@
+{
+  "type": "FeatureCollection",
+  "name": "regiones_sanitarias_cordoba",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:EPSG::4326"
+    }
+  },
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS01",
+        "nombre": "Región Sanitaria Capital",
+        "numero": 1,
+        "cabecera": "Córdoba",
+        "departamentos": ["Capital"],
+        "poblacion": 1330023
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.35, -31.25], [-64.35, -31.55], [-64.05, -31.55], [-64.05, -31.25], [-64.35, -31.25]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS02",
+        "nombre": "Región Sanitaria Punilla",
+        "numero": 2,
+        "cabecera": "Carlos Paz",
+        "departamentos": ["Punilla"],
+        "poblacion": 178401
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.75, -30.75], [-64.75, -31.45], [-64.25, -31.45], [-64.25, -30.75], [-64.75, -30.75]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS03",
+        "nombre": "Región Sanitaria Colón",
+        "numero": 3,
+        "cabecera": "Jesús María",
+        "departamentos": ["Colón", "Totoral"],
+        "poblacion": 243707
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.45, -30.45], [-64.45, -31.35], [-63.45, -31.35], [-63.45, -30.45], [-64.45, -30.45]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS04",
+        "nombre": "Región Sanitaria Norte",
+        "numero": 4,
+        "cabecera": "Deán Funes",
+        "departamentos": ["Ischilín", "Tulumba", "Sobremonte", "Río Seco"],
+        "poblacion": 61736
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.65, -29.45], [-64.65, -30.75], [-62.75, -30.75], [-62.75, -29.45], [-64.65, -29.45]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS05",
+        "nombre": "Región Sanitaria Cruz del Eje",
+        "numero": 5,
+        "cabecera": "Cruz del Eje",
+        "departamentos": ["Cruz del Eje", "Minas", "Pocho"],
+        "poblacion": 68866
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.50, -30.35], [-65.50, -31.65], [-64.45, -31.65], [-64.45, -30.35], [-65.50, -30.35]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS06",
+        "nombre": "Región Sanitaria Traslasierra",
+        "numero": 6,
+        "cabecera": "Villa Dolores",
+        "departamentos": ["San Javier", "San Alberto"],
+        "poblacion": 89828
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.50, -31.35], [-65.50, -32.45], [-64.45, -32.45], [-64.45, -31.35], [-65.50, -31.35]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS07",
+        "nombre": "Región Sanitaria Santa María",
+        "numero": 7,
+        "cabecera": "Alta Gracia",
+        "departamentos": ["Santa María", "Calamuchita"],
+        "poblacion": 151100
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.85, -31.45], [-64.85, -32.55], [-63.85, -32.55], [-63.85, -31.45], [-64.85, -31.45]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS08",
+        "nombre": "Región Sanitaria Río Segundo",
+        "numero": 8,
+        "cabecera": "Villa del Rosario",
+        "departamentos": ["Río Segundo", "Río Primero"],
+        "poblacion": 150393
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.75, -30.75], [-63.75, -32.05], [-62.85, -32.05], [-62.85, -30.75], [-63.75, -30.75]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS09",
+        "nombre": "Región Sanitaria Tercero Arriba",
+        "numero": 9,
+        "cabecera": "Río Tercero",
+        "departamentos": ["Tercero Arriba"],
+        "poblacion": 109554
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.35, -31.95], [-64.35, -32.55], [-63.65, -32.55], [-63.65, -31.95], [-64.35, -31.95]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS10",
+        "nombre": "Región Sanitaria San Justo",
+        "numero": 10,
+        "cabecera": "San Francisco",
+        "departamentos": ["San Justo"],
+        "poblacion": 206307
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-62.55, -30.75], [-62.55, -31.85], [-61.75, -31.85], [-61.75, -30.75], [-62.55, -30.75]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS11",
+        "nombre": "Región Sanitaria Unión",
+        "numero": 11,
+        "cabecera": "Bell Ville",
+        "departamentos": ["Unión", "Marcos Juárez"],
+        "poblacion": 209932
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.05, -32.35], [-63.05, -33.25], [-61.95, -33.25], [-61.95, -32.35], [-63.05, -32.35]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS12",
+        "nombre": "Región Sanitaria General San Martín",
+        "numero": 12,
+        "cabecera": "Villa María",
+        "departamentos": ["General San Martín", "Juárez Celman"],
+        "poblacion": 188532
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-63.85, -32.15], [-63.85, -33.65], [-62.85, -33.65], [-62.85, -32.15], [-63.85, -32.15]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS13",
+        "nombre": "Región Sanitaria Río Cuarto",
+        "numero": 13,
+        "cabecera": "Río Cuarto",
+        "departamentos": ["Río Cuarto"],
+        "poblacion": 246393
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-64.85, -32.75], [-64.85, -33.55], [-63.75, -33.55], [-63.75, -32.75], [-64.85, -32.75]]]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "codigo": "RS14",
+        "nombre": "Región Sanitaria Sur",
+        "numero": 14,
+        "cabecera": "Laboulaye",
+        "departamentos": ["General Roca", "Presidente Roque Sáenz Peña"],
+        "poblacion": 72036
+      },
+      "geometry": {
+        "type": "MultiPolygon",
+        "coordinates": [[[[-65.05, -33.55], [-65.05, -34.85], [-62.75, -34.85], [-62.75, -33.55], [-65.05, -33.55]]]]
+      }
+    }
+  ]
+}
