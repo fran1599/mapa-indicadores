@@ -1,0 +1,39 @@
+# Variables de entorno
+.env
+
+# Volúmenes de Docker
+postgis_data/
+geoserver_data/
+pgadmin_data/
+
+# Archivos temporales
+*.tmp
+*.temp
+*.log
+*.bak
+*.swp
+*~
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Datos sensibles
+*.pem
+*.key
+*.crt
+
+# Caché y archivos generados
+__pycache__/
+*.pyc
+.cache/
+node_modules/
+
+# IDEs y editores
+.idea/
+.vscode/
+*.sublime-*
+
+# Archivos de respaldo
+*.backup
+*.sql.gz
