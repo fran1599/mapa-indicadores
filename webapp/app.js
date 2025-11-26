@@ -27,8 +27,9 @@ const baseMaps = {
 L.control.layers(baseMaps).addTo(map);
 
 // Función para cargar GeoJSON desde GeoServer
-async function cargarCapaGeoServer(nombreCapa) {
-    const url = `http://localhost:8080/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=${nombreCapa}&outputFormat=application/json`;
+// Nota: Ajustar la URL según el entorno de despliegue
+async function cargarCapaGeoServer(nombreCapa, geoserverUrl = 'http://localhost:8080') {
+    const url = `${geoserverUrl}/geoserver/wfs?service=WFS&version=1.0.0&request=GetFeature&typeName=${nombreCapa}&outputFormat=application/json`;
     try {
         const response = await fetch(url);
         const data = await response.json();
