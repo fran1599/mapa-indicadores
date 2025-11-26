@@ -120,6 +120,7 @@ def normalizar_texto(texto):
     """
     Normaliza el texto para facilitar la búsqueda.
     Remueve acentos, convierte a minúsculas y elimina espacios extras.
+    Preserva la letra 'ñ' ya que es distintiva en español.
     
     Args:
         texto: Texto a normalizar
@@ -133,12 +134,15 @@ def normalizar_texto(texto):
     # Convertir a minúsculas
     texto = texto.lower().strip()
     
+    # Preservar la ñ antes de la normalización
+    texto = texto.replace("ñ", "\x00")  # Marcador temporal
+    
     # Remover acentos usando normalización Unicode
     texto = unicodedata.normalize('NFD', texto)
     texto = ''.join(char for char in texto if unicodedata.category(char) != 'Mn')
     
-    # Reemplazos adicionales comunes
-    texto = texto.replace("ñ", "n")
+    # Restaurar la ñ
+    texto = texto.replace("\x00", "n")  # Convertir a n para facilitar búsqueda
     
     return texto
 
@@ -185,7 +189,7 @@ def geocodificar_nominatim(direccion, provincia="Córdoba"):
         "limit": 1
     }
     headers = {
-        "User-Agent": "IndicadoresAdiccionesCordoba/1.0 (https://github.com/tu-usuario/mapa-indicadores)"
+        "User-Agent": "IndicadoresAdiccionesCordoba/1.0 (https://github.com/fran1599/mapa-indicadores)"
     }
     
     try:

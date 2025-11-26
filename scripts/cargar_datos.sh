@@ -93,6 +93,17 @@ cargar_departamentos() {
         return 1
     fi
     
+    # Validar que el archivo está en el directorio esperado
+    local real_path
+    real_path=$(realpath "$geojson_file")
+    local expected_dir
+    expected_dir=$(realpath "$CORDOBA_DIR")
+    
+    if [[ ! "$real_path" =~ ^"$expected_dir" ]]; then
+        print_error "El archivo no está en el directorio esperado: $CORDOBA_DIR"
+        return 1
+    fi
+    
     # Leer el contenido del GeoJSON
     local geojson_content
     geojson_content=$(cat "$geojson_file")
@@ -157,6 +168,17 @@ cargar_regiones_sanitarias() {
         return 1
     fi
     
+    # Validar que el archivo está en el directorio esperado
+    local real_path
+    real_path=$(realpath "$geojson_file")
+    local expected_dir
+    expected_dir=$(realpath "$CORDOBA_DIR")
+    
+    if [[ ! "$real_path" =~ ^"$expected_dir" ]]; then
+        print_error "El archivo no está en el directorio esperado: $CORDOBA_DIR"
+        return 1
+    fi
+    
     local geojson_content
     geojson_content=$(cat "$geojson_file")
     
@@ -203,6 +225,17 @@ cargar_localidades() {
     
     if [ ! -f "$csv_file" ]; then
         print_error "No se encontró el archivo $csv_file"
+        return 1
+    fi
+    
+    # Validar que el archivo está en el directorio esperado
+    local real_path
+    real_path=$(realpath "$csv_file")
+    local expected_dir
+    expected_dir=$(realpath "$CORDOBA_DIR")
+    
+    if [[ ! "$real_path" =~ ^"$expected_dir" ]]; then
+        print_error "El archivo no está en el directorio esperado: $CORDOBA_DIR"
         return 1
     fi
     
@@ -253,6 +286,17 @@ cargar_indicadores_ejemplo() {
     
     if [ ! -f "$csv_file" ]; then
         print_error "No se encontró el archivo $csv_file"
+        return 1
+    fi
+    
+    # Validar que el archivo está en el directorio esperado
+    local real_path
+    real_path=$(realpath "$csv_file")
+    local expected_dir
+    expected_dir=$(realpath "$DATA_DIR")
+    
+    if [[ ! "$real_path" =~ ^"$expected_dir" ]]; then
+        print_error "El archivo no está en el directorio esperado: $DATA_DIR"
         return 1
     fi
     
