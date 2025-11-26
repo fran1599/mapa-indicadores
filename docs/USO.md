@@ -8,10 +8,11 @@ Esta guía explica cómo utilizar el sistema de visualización de indicadores de
 2. [Datos de Córdoba Incluidos](#datos-de-córdoba-incluidos)
 3. [Geocodificación de Localidades](#geocodificación-de-localidades)
 4. [Cargar Datos Geográficos](#cargar-datos-geográficos)
-5. [Crear Mapas de Calor en Kepler.gl](#crear-mapas-de-calor-en-keplergl)
-6. [Publicar Capas en GeoServer](#publicar-capas-en-geoserver)
-7. [Consultas Espaciales en PostGIS](#consultas-espaciales-en-postgis)
-8. [Ejemplos de Análisis para Córdoba](#ejemplos-de-análisis-para-córdoba)
+5. [Usar la Webapp Leaflet (Recomendado)](#usar-la-webapp-leaflet-recomendado)
+6. [Crear Mapas de Calor en Kepler.gl](#crear-mapas-de-calor-en-keplergl)
+7. [Publicar Capas en GeoServer](#publicar-capas-en-geoserver)
+8. [Consultas Espaciales en PostGIS](#consultas-espaciales-en-postgis)
+9. [Ejemplos de Análisis para Córdoba](#ejemplos-de-análisis-para-córdoba)
 
 ---
 
@@ -44,6 +45,18 @@ Esta guía explica cómo utilizar el sistema de visualización de indicadores de
 
 1. Abrir http://localhost:8081
 2. No requiere autenticación
+3. **Nota**: Requiere token de Mapbox para funcionar correctamente
+
+### MapStore (Alternativa sin Mapbox)
+
+1. Abrir http://localhost:8082
+2. No requiere autenticación ni API keys externas
+
+### Webapp Leaflet (Recomendado)
+
+1. Abrir http://localhost:8083
+2. No requiere autenticación ni API keys
+3. Funciona 100% con OpenStreetMap
 
 ---
 
@@ -199,7 +212,80 @@ INSERT INTO centros_atencion (nombre, direccion, telefono, tipo, ubicacion, zona
 
 ---
 
+## Usar la Webapp Leaflet (Recomendado)
+
+La Webapp Leaflet es la forma más sencilla de visualizar mapas sin necesidad de API keys externas. Usa OpenStreetMap y CARTO como proveedores de tiles gratuitos.
+
+### Acceder a la Webapp
+
+1. Abrir http://localhost:8083
+2. El mapa se cargará automáticamente centrado en Córdoba
+3. Un mapa de calor de ejemplo se muestra por defecto
+
+### Cambiar Capa Base
+
+En la esquina superior derecha encontrarás un control de capas:
+
+- **OpenStreetMap**: Mapa base estándar
+- **Carto Claro**: Estilo minimalista claro
+- **Carto Oscuro (Recomendado)**: Ideal para mapas de calor, mejor contraste
+
+### Interactuar con el Mapa
+
+- **Zoom**: Usar scroll del mouse o botones +/-
+- **Pan**: Arrastrar el mapa
+- **Ver detalles**: Clic en los marcadores circulares
+
+### Personalizar la Webapp
+
+Para agregar tus propios datos, edita el archivo `webapp/app.js`:
+
+```javascript
+// Agregar nuevos puntos al mapa de calor
+const nuevosPuntos = [
+    {lat: -31.4201, lon: -64.1888, intensidad: 1.0, nombre: "Mi Localidad"},
+    // Agregar más puntos...
+];
+
+// Crear capa de calor
+const miHeatLayer = crearMapaCalor(nuevosPuntos);
+miHeatLayer.addTo(map);
+```
+
+### Cargar Datos desde GeoServer
+
+La webapp incluye una función para cargar capas desde GeoServer:
+
+```javascript
+// Cargar capa WFS desde GeoServer
+const datos = await cargarCapaGeoServer('adicciones:zonas_geograficas');
+if (datos) {
+    L.geoJSON(datos).addTo(map);
+}
+```
+
+### Crear Mapa de Calor Personalizado
+
+```javascript
+// Función para crear mapa de calor
+const heatLayer = L.heatLayer(misDatos, {
+    radius: 25,      // Radio del punto de calor
+    blur: 15,        // Difuminado
+    maxZoom: 10,     // Zoom máximo
+    gradient: {
+        0.0: 'blue',
+        0.5: 'yellow',
+        1.0: 'red'
+    }
+});
+heatLayer.addTo(map);
+```
+
+---
+
 ## Crear Mapas de Calor en Kepler.gl
+
+> ⚠️ **Nota**: Kepler.gl requiere un token de Mapbox para mostrar mapas base. Si no tenés un token, usá la [Webapp Leaflet](#usar-la-webapp-leaflet-recomendado) que funciona sin API keys.
 
 ### Paso 1: Exportar datos desde PostGIS
 
