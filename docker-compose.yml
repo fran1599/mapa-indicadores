@@ -40,14 +40,28 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
-  kepler:
-    image: crazycapivara/kepler.gl
-    container_name: gis_kepler
+  # Jupyter + Leafmap (reemplaza a Kepler.gl)
+  jupyter:
+    image: quay.io/jupyter/scipy-notebook:latest
+    container_name: gis_jupyter
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - GRANT_SUDO=yes
+    user: root
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./data:/home/jovyan/data
+      - ./scripts:/home/jovyan/scripts
     ports:
-      - "8081:80"
+      - "8888:8888"
+    command: >
+      bash -c "pip install leafmap geopandas sqlalchemy psycopg2-binary folium mapclassify &&
+               start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''"
+    depends_on:
+      postgis:
+        condition: service_healthy
     networks:
       - gis_network
-    restart: unless-stopped
 
   pgadmin:
     image: dpage/pgadmin4

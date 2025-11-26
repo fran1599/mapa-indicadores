@@ -33,6 +33,10 @@ __pycache__/
 .cache/
 node_modules/
 
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb_checkpoints/
+
 # IDEs y editores
 .idea/
 .vscode/

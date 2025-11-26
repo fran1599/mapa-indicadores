@@ -6,8 +6,8 @@ Sistema dockerizado para visualizar indicadores de la secretaría de adicciones 
 
 - **PostGIS**: Base de datos geoespacial para almacenar zonas, indicadores y datos censales
 - **GeoServer**: Servidor de mapas para publicar capas WMS/WFS
-- **Kepler.gl**: Visualización interactiva de mapas de calor (opcional, requiere Mapbox)
-- **MapStore**: Alternativa a Kepler.gl sin necesidad de API key externas
+- **Jupyter + Leafmap**: Notebooks interactivos para análisis y visualización de mapas (100% gratuito)
+- **MapStore**: Alternativa visual sin necesidad de API key externas
 - **Webapp Leaflet**: Aplicación web simple con OpenStreetMap (recomendado, sin API keys)
 - **pgAdmin**: Interfaz web para administrar la base de datos
 - **Datos de Córdoba**: 26 departamentos, 14 regiones sanitarias y más de 50 localidades precargadas
@@ -48,12 +48,12 @@ chmod +x scripts/cargar_datos.sh
 |----------|-----|-------------|
 | pgAdmin | http://localhost:5050 | Administración de PostgreSQL |
 | GeoServer | http://localhost:8080/geoserver | Servidor de mapas |
-| Kepler.gl | http://localhost:8081 | Visualización (requiere Mapbox, opcional) |
+| Jupyter + Leafmap | http://localhost:8888 | Notebooks interactivos (recomendado) |
 | MapStore | http://localhost:8082 | Visualización de mapas (sin Mapbox) |
-| Webapp Leaflet | http://localhost:8083 | Webapp con OpenStreetMap (recomendado) |
+| Webapp Leaflet | http://localhost:8083 | Webapp con OpenStreetMap |
 | PostgreSQL | localhost:5432 | Base de datos (conexión directa) |
 
-> 💡 **Recomendado**: Para empezar sin configuración adicional, usá la Webapp Leaflet en http://localhost:8083
+> 💡 **Recomendado**: Para análisis avanzado usá Jupyter + Leafmap en http://localhost:8888 (sin token, acceso directo)
 
 ## 🔐 Credenciales por Defecto
 
@@ -92,6 +92,12 @@ chmod +x scripts/cargar_datos.sh
 │   │   └── regiones_sanitarias.geojson  # 14 regiones sanitarias
 │   ├── provincias_argentina.geojson  # Geometrías de provincias
 │   └── ejemplo_indicadores.csv       # Datos de ejemplo
+│
+├── notebooks/
+│   ├── 01_inicio_rapido.ipynb        # Inicio rápido con Leafmap
+│   ├── 02_mapa_calor.ipynb           # Crear mapas de calor
+│   ├── 03_conexion_postgis.ipynb     # Conectar con PostGIS
+│   └── 04_cruce_datos.ipynb          # Análisis de datos
 │
 ├── webapp/
 │   ├── index.html              # Aplicación web con Leaflet
@@ -177,28 +183,25 @@ docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c \
 
 ## 🔥 Crear Mapa de Calor
 
-### Opción 1: Webapp Leaflet (Recomendado - Sin API key)
+### Opción 1: Jupyter + Leafmap (Recomendado - 100% Gratuito)
+
+1. Acceder a http://localhost:8888
+2. Abrir el notebook `02_mapa_calor.ipynb`
+3. Ejecutar las celdas para crear mapas de calor personalizados
+4. Exportar como HTML para compartir
+
+**Notebooks disponibles:**
+- `01_inicio_rapido.ipynb`: Introducción a Leafmap
+- `02_mapa_calor.ipynb`: Crear mapas de calor
+- `03_conexion_postgis.ipynb`: Conectar con la base de datos
+- `04_cruce_datos.ipynb`: Análisis cruzando datos censales
+
+### Opción 2: Webapp Leaflet (Sin configuración)
 
 1. Acceder a http://localhost:8083
 2. El mapa de calor de ejemplo se carga automáticamente
 3. Usar el selector de capas para cambiar entre estilos (OpenStreetMap, Carto Claro, Carto Oscuro)
 4. Hacer clic en los marcadores para ver detalles
-
-### Opción 2: Kepler.gl (Requiere Mapbox token)
-
-1. Exportar datos con coordenadas desde PostGIS:
-   ```sql
-   SELECT l.nombre, l.latitud, l.longitud, i.tipo_indicador, i.valor
-   FROM indicadores_adicciones i
-   JOIN localidades l ON i.localidad_id = l.id;
-   ```
-2. Guardar como CSV
-3. Abrir http://localhost:8081
-4. Arrastrar el archivo CSV
-5. Cambiar tipo de capa a "Heatmap"
-6. Configurar peso por columna `valor`
-
-> ⚠️ **Nota**: Kepler.gl requiere un token de Mapbox. Si no tenés uno, usá la Webapp Leaflet en http://localhost:8083
 
 ## 📖 Documentación Adicional
 
@@ -210,7 +213,7 @@ docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c \
 
 1. **Cargar datos reales**: Reemplazar los datos de ejemplo con datos reales de la secretaría
 2. **Configurar GeoServer**: Publicar las capas de zonas e indicadores
-3. **Personalizar Kepler.gl**: Crear dashboards específicos para análisis
+3. **Usar Jupyter + Leafmap**: Crear análisis personalizados en los notebooks
 4. **Agregar autenticación**: Implementar control de acceso a los servicios
 5. **Configurar backups**: Establecer respaldos automáticos de la base de datos
 6. **Escalar servicios**: Agregar réplicas según demanda

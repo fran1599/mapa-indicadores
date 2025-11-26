@@ -8,8 +8,8 @@ Esta guía explica cómo utilizar el sistema de visualización de indicadores de
 2. [Datos de Córdoba Incluidos](#datos-de-córdoba-incluidos)
 3. [Geocodificación de Localidades](#geocodificación-de-localidades)
 4. [Cargar Datos Geográficos](#cargar-datos-geográficos)
-5. [Usar la Webapp Leaflet (Recomendado)](#usar-la-webapp-leaflet-recomendado)
-6. [Crear Mapas de Calor en Kepler.gl](#crear-mapas-de-calor-en-keplergl)
+5. [Usar Jupyter + Leafmap (Recomendado)](#usar-jupyter--leafmap-recomendado)
+6. [Usar la Webapp Leaflet](#usar-la-webapp-leaflet)
 7. [Publicar Capas en GeoServer](#publicar-capas-en-geoserver)
 8. [Consultas Espaciales en PostGIS](#consultas-espaciales-en-postgis)
 9. [Ejemplos de Análisis para Córdoba](#ejemplos-de-análisis-para-córdoba)
@@ -41,18 +41,19 @@ Esta guía explica cómo utilizar el sistema de visualización de indicadores de
    - Usuario: `admin`
    - Contraseña: `admin123`
 
-### Kepler.gl (Visualización)
+### Jupyter + Leafmap (Recomendado)
 
-1. Abrir http://localhost:8081
-2. No requiere autenticación
-3. **Nota**: Requiere token de Mapbox para funcionar correctamente
+1. Abrir http://localhost:8888
+2. No requiere token ni contraseña (acceso directo)
+3. Abrir la carpeta `work/` para ver los notebooks
+4. 100% gratuito, usa OpenStreetMap como mapa base
 
 ### MapStore (Alternativa sin Mapbox)
 
 1. Abrir http://localhost:8082
 2. No requiere autenticación ni API keys externas
 
-### Webapp Leaflet (Recomendado)
+### Webapp Leaflet
 
 1. Abrir http://localhost:8083
 2. No requiere autenticación ni API keys
@@ -212,9 +213,101 @@ INSERT INTO centros_atencion (nombre, direccion, telefono, tipo, ubicacion, zona
 
 ---
 
-## Usar la Webapp Leaflet (Recomendado)
+## Usar Jupyter + Leafmap (Recomendado)
 
-La Webapp Leaflet es la forma más sencilla de visualizar mapas sin necesidad de API keys externas. Usa OpenStreetMap y CARTO como proveedores de tiles gratuitos.
+Jupyter + Leafmap es la forma más potente y flexible de crear visualizaciones de mapas. Es 100% gratuito y usa OpenStreetMap como mapa base.
+
+### Acceder a Jupyter
+
+1. Abrir http://localhost:8888
+2. No requiere token ni contraseña (acceso directo)
+3. Navegar a la carpeta `work/` para ver los notebooks disponibles
+
+### Notebooks Disponibles
+
+| Notebook | Descripción |
+|----------|-------------|
+| `01_inicio_rapido.ipynb` | Introducción a Leafmap, crear mapas básicos |
+| `02_mapa_calor.ipynb` | Crear mapas de calor con indicadores |
+| `03_conexion_postgis.ipynb` | Conectar y consultar datos desde PostGIS |
+| `04_cruce_datos.ipynb` | Análisis cruzando indicadores con datos censales |
+
+### Crear un Mapa Básico
+
+```python
+import leafmap
+
+# Crear mapa centrado en Córdoba
+m = leafmap.Map(center=[-31.4201, -64.1888], zoom=7)
+m
+```
+
+### Cargar GeoJSON
+
+```python
+import geopandas as gpd
+
+# Cargar departamentos de Córdoba
+departamentos = gpd.read_file('/home/jovyan/data/cordoba/departamentos.geojson')
+
+# Agregar al mapa
+m = leafmap.Map(center=[-31.4201, -64.1888], zoom=7)
+m.add_gdf(departamentos, layer_name="Departamentos de Córdoba")
+m
+```
+
+### Crear Mapa de Calor
+
+```python
+import pandas as pd
+
+# Cargar datos de indicadores
+datos = pd.read_csv('/home/jovyan/data/ejemplo_indicadores.csv')
+
+# Crear mapa con heatmap
+m = leafmap.Map(center=[-31.4201, -64.1888], zoom=7)
+m.add_heatmap(
+    data=datos,
+    latitude="latitud",
+    longitude="longitud",
+    value="valor",
+    name="Mapa de Calor",
+    radius=25
+)
+m
+```
+
+### Conectar con PostGIS
+
+```python
+from sqlalchemy import create_engine
+import geopandas as gpd
+
+# Conexión a la base de datos
+engine = create_engine('postgresql://gisuser:gispassword@postgis:5432/gis_adicciones')
+
+# Cargar datos espaciales
+query = "SELECT * FROM zonas_geograficas WHERE tipo = 'departamento'"
+zonas = gpd.read_postgis(query, engine, geom_col='geom')
+
+# Visualizar en mapa
+m = leafmap.Map(center=[-31.4201, -64.1888], zoom=7)
+m.add_gdf(zonas, layer_name="Departamentos")
+m
+```
+
+### Exportar Mapa como HTML
+
+```python
+# Guardar mapa interactivo como HTML
+m.to_html('/home/jovyan/work/mi_mapa.html')
+```
+
+---
+
+## Usar la Webapp Leaflet
+
+La Webapp Leaflet es una alternativa simple para visualizar mapas sin necesidad de programar. Usa OpenStreetMap y CARTO como proveedores de tiles gratuitos.
 
 ### Acceder a la Webapp
 
@@ -280,84 +373,6 @@ const heatLayer = L.heatLayer(misDatos, {
 });
 heatLayer.addTo(map);
 ```
-
----
-
-## Crear Mapas de Calor en Kepler.gl
-
-> ⚠️ **Nota**: Kepler.gl requiere un token de Mapbox para mostrar mapas base. Si no tenés un token, usá la [Webapp Leaflet](#usar-la-webapp-leaflet-recomendado) que funciona sin API keys.
-
-### Paso 1: Exportar datos desde PostGIS
-
-```sql
--- Exportar indicadores con coordenadas para Kepler.gl
-COPY (
-  SELECT 
-    i.id,
-    z.nombre as zona,
-    i.tipo_indicador,
-    i.valor,
-    i.fecha,
-    ST_X(i.ubicacion) as longitud,
-    ST_Y(i.ubicacion) as latitud
-  FROM indicadores_adicciones i
-  JOIN zonas_geograficas z ON i.zona_id = z.id
-  WHERE i.ubicacion IS NOT NULL
-) TO '/tmp/indicadores_kepler.csv' WITH CSV HEADER;
-```
-
-O desde terminal:
-```bash
-docker exec gis_postgis psql -U gisuser -d gis_adicciones -c "
-COPY (
-  SELECT 
-    i.id,
-    z.nombre as zona,
-    i.tipo_indicador,
-    i.valor,
-    i.fecha,
-    ST_X(i.ubicacion) as longitud,
-    ST_Y(i.ubicacion) as latitud
-  FROM indicadores_adicciones i
-  JOIN zonas_geograficas z ON i.zona_id = z.id
-  WHERE i.ubicacion IS NOT NULL
-) TO STDOUT WITH CSV HEADER;" > indicadores_kepler.csv
-```
-
-### Paso 2: Cargar en Kepler.gl
-
-1. Abrir http://localhost:8081
-2. Arrastrar el archivo CSV a la interfaz
-3. Kepler.gl detectará automáticamente las columnas de latitud/longitud
-
-### Paso 3: Configurar mapa de calor
-
-1. En el panel izquierdo, clic en la capa de datos
-2. Cambiar "Layer Type" a "Heatmap"
-3. Configurar:
-   - **Weight**: Seleccionar columna `valor`
-   - **Radius**: Ajustar según densidad de datos
-   - **Intensity**: Ajustar escala de colores
-
-### Paso 4: Filtrar datos
-
-1. Agregar filtro por `tipo_indicador`:
-   - Clic en "Add Filter"
-   - Seleccionar columna `tipo_indicador`
-   - Elegir valores a mostrar
-
-2. Agregar filtro temporal por `fecha`:
-   - Clic en "Add Filter"
-   - Seleccionar columna `fecha`
-   - Usar slider para rango de fechas
-
-### Paso 5: Exportar visualización
-
-1. Clic en "Share" (esquina superior derecha)
-2. Opciones:
-   - **Export Image**: PNG/JPG de la vista actual
-   - **Export Data**: Datos procesados
-   - **Export Map**: Configuración completa del mapa
 
 ---
 
@@ -643,7 +658,7 @@ LEFT JOIN (
 WHERE z.tipo = 'departamento' AND z.codigo_padre = 'AR-X';
 ```
 
-### Exportar localidades para Kepler.gl
+### Exportar localidades para Leafmap
 
 ```sql
 -- CSV de localidades con indicadores para mapa de calor
@@ -713,7 +728,7 @@ docker exec gis_postgis psql -U gisuser -d gis_adicciones -c "
 
 - [Documentación de PostGIS](https://postgis.net/documentation/)
 - [Documentación de GeoServer](https://docs.geoserver.org/)
-- [Documentación de Kepler.gl](https://docs.kepler.gl/)
+- [Documentación de Leafmap](https://leafmap.org/)
 - [Tutorial de SQL espacial](https://postgis.net/workshops/postgis-intro/)
 
 ### Fuentes de Datos de Córdoba
