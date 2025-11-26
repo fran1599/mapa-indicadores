@@ -36,11 +36,9 @@ docker-compose up -d
 
 # 4. Verificar que los servicios estén corriendo
 docker-compose ps
-
-# 5. Cargar datos de Córdoba
-chmod +x scripts/cargar_datos.sh
-./scripts/cargar_datos.sh
 ```
+
+> 📌 **¡Listo!** Los datos de ejemplo (departamentos, localidades e indicadores) se cargan automáticamente al iniciar PostGIS. No es necesario ejecutar scripts adicionales.
 
 ## 🌐 URLs de Acceso
 
@@ -57,12 +55,17 @@ chmod +x scripts/cargar_datos.sh
 
 ## 🚀 Inicio Rápido con Jupyter
 
-1. Acceder a Jupyter: http://localhost:8888
-2. Abrir la carpeta `notebooks/`
+1. Acceder a Jupyter: http://localhost:8888 (acceso directo sin token)
+2. Abrir la carpeta `work/` (corresponde a `notebooks/`)
 3. Ejecutar los notebooks en orden:
+   - `00_carga_datos.ipynb` - Verificar que los datos se cargaron correctamente
    - `01_inicio_rapido.ipynb` - Mapa básico de Córdoba
    - `02_mapa_calor.ipynb` - Mapas de calor con indicadores
    - `03_analisis_por_zona.ipynb` - Análisis por departamento y región
+   - `04_conexion_postgis.ipynb` - Consultas a la base de datos PostGIS
+   - `05_cruce_datos.ipynb` - Análisis cruzados con datos censales
+
+> 💡 **Nota:** Los datos de ejemplo ya están cargados en PostGIS. Los notebooks solo consultan datos, no los crean.
 
 ### Archivos de datos disponibles
 
