@@ -66,6 +66,31 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  mapstore:
+    image: geosolutionsit/mapstore2:2023.02.02
+    container_name: mapstore
+    ports:
+      - "8082:8080"
+    environment:
+      - JAVA_OPTS=-Xms512m -Xmx1024m
+    depends_on:
+      - postgis
+      - geoserver
+    networks:
+      - gis_network
+    restart: unless-stopped
+
+  webapp:
+    image: nginx:alpine
+    container_name: webapp-mapas
+    ports:
+      - "8083:80"
+    volumes:
+      - ./webapp:/usr/share/nginx/html:ro
+    networks:
+      - gis_network
+    restart: unless-stopped
+
 volumes:
   postgis_data:
   geoserver_data:

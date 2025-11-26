@@ -6,10 +6,13 @@ Sistema dockerizado para visualizar indicadores de la secretaría de adicciones 
 
 - **PostGIS**: Base de datos geoespacial para almacenar zonas, indicadores y datos censales
 - **GeoServer**: Servidor de mapas para publicar capas WMS/WFS
-- **Kepler.gl**: Visualización interactiva de mapas de calor
+- **Kepler.gl**: Visualización interactiva de mapas de calor (opcional, requiere Mapbox)
+- **MapStore**: Alternativa a Kepler.gl sin necesidad de API key externas
+- **Webapp Leaflet**: Aplicación web simple con OpenStreetMap (recomendado, sin API keys)
 - **pgAdmin**: Interfaz web para administrar la base de datos
 - **Datos de Córdoba**: 26 departamentos, 14 regiones sanitarias y más de 50 localidades precargadas
 - **Geocodificación**: Script Python para geocodificar localidades de Córdoba
+- **100% Libre de API Keys**: Sistema funcional sin registros en servicios externos
 
 ## 📋 Requisitos Previos
 
@@ -45,8 +48,12 @@ chmod +x scripts/cargar_datos.sh
 |----------|-----|-------------|
 | pgAdmin | http://localhost:5050 | Administración de PostgreSQL |
 | GeoServer | http://localhost:8080/geoserver | Servidor de mapas |
-| Kepler.gl | http://localhost:8081 | Visualización de mapas de calor |
+| Kepler.gl | http://localhost:8081 | Visualización (requiere Mapbox, opcional) |
+| MapStore | http://localhost:8082 | Visualización de mapas (sin Mapbox) |
+| Webapp Leaflet | http://localhost:8083 | Webapp con OpenStreetMap (recomendado) |
 | PostgreSQL | localhost:5432 | Base de datos (conexión directa) |
+
+> 💡 **Recomendado**: Para empezar sin configuración adicional, usá la Webapp Leaflet en http://localhost:8083
 
 ## 🔐 Credenciales por Defecto
 
@@ -73,6 +80,11 @@ chmod +x scripts/cargar_datos.sh
 ├── .env.example                # Plantilla de variables de entorno
 ├── .gitignore                  # Archivos ignorados por Git
 │
+├── config/
+│   ├── map-style-osm.json            # Estilo OpenStreetMap (gratuito)
+│   ├── map-style-carto-light.json    # Estilo Carto claro (gratuito)
+│   └── map-style-carto-dark.json     # Estilo Carto oscuro (gratuito)
+│
 ├── data/
 │   ├── cordoba/
 │   │   ├── departamentos.geojson     # 26 departamentos de Córdoba
@@ -80,6 +92,10 @@ chmod +x scripts/cargar_datos.sh
 │   │   └── regiones_sanitarias.geojson  # 14 regiones sanitarias
 │   ├── provincias_argentina.geojson  # Geometrías de provincias
 │   └── ejemplo_indicadores.csv       # Datos de ejemplo
+│
+├── webapp/
+│   ├── index.html              # Aplicación web con Leaflet
+│   └── app.js                  # Lógica de la aplicación
 │
 ├── scripts/
 │   ├── init-db.sql             # Esquema inicial de la base de datos
@@ -159,7 +175,16 @@ docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c \
   "SELECT nombre, departamento, poblacion FROM localidades ORDER BY poblacion DESC LIMIT 10;"
 ```
 
-## 🔥 Crear Mapa de Calor en Kepler.gl
+## 🔥 Crear Mapa de Calor
+
+### Opción 1: Webapp Leaflet (Recomendado - Sin API key)
+
+1. Acceder a http://localhost:8083
+2. El mapa de calor de ejemplo se carga automáticamente
+3. Usar el selector de capas para cambiar entre estilos (OpenStreetMap, Carto Claro, Carto Oscuro)
+4. Hacer clic en los marcadores para ver detalles
+
+### Opción 2: Kepler.gl (Requiere Mapbox token)
 
 1. Exportar datos con coordenadas desde PostGIS:
    ```sql
@@ -172,6 +197,8 @@ docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c \
 4. Arrastrar el archivo CSV
 5. Cambiar tipo de capa a "Heatmap"
 6. Configurar peso por columna `valor`
+
+> ⚠️ **Nota**: Kepler.gl requiere un token de Mapbox. Si no tenés uno, usá la Webapp Leaflet en http://localhost:8083
 
 ## 📖 Documentación Adicional
 
