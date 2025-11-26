@@ -45,12 +45,17 @@ wait_for_postgis() {
 load_geojson() {
     echo -e "${YELLOW}Cargando GeoJSON de provincias...${NC}"
     
-    local geojson_file="./data/provincias_argentina.geojson"
+    # Obtener ruta absoluta del directorio del script
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local geojson_file="${script_dir}/../data/provincias_argentina.geojson"
     
     if [ ! -f "$geojson_file" ]; then
         echo -e "${RED}Error: No se encontró el archivo $geojson_file${NC}"
         return 1
     fi
+    
+    # Obtener ruta absoluta
+    geojson_file="$(cd "$(dirname "$geojson_file")" && pwd)/$(basename "$geojson_file")"
     
     # Usar ogr2ogr si está disponible, sino usar SQL directo
     if command -v ogr2ogr &> /dev/null; then
@@ -120,15 +125,21 @@ EOF
 load_csv_data() {
     echo -e "${YELLOW}Cargando datos de ejemplo del CSV...${NC}"
     
-    local csv_file="./data/datos_ejemplo.csv"
+    # Obtener ruta absoluta del directorio del script
+    local script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local csv_file="${script_dir}/../data/datos_ejemplo.csv"
     
+    # Verificar que el archivo existe
     if [ ! -f "$csv_file" ]; then
         echo -e "${RED}Error: No se encontró el archivo $csv_file${NC}"
         return 1
     fi
     
-    # Crear tabla temporal y cargar CSV
-    PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" <<EOF
+    # Obtener ruta absoluta del CSV
+    csv_file="$(cd "$(dirname "$csv_file")" && pwd)/$(basename "$csv_file")"
+    
+    # Crear tabla temporal y cargar CSV usando \copy con ruta absoluta
+    PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" <<EOSQL
 -- Crear tabla temporal para importar CSV
 CREATE TEMP TABLE datos_temp (
     zona_codigo VARCHAR(20),
@@ -137,10 +148,14 @@ CREATE TEMP TABLE datos_temp (
     valor NUMERIC(12, 2),
     descripcion TEXT
 );
+EOSQL
 
--- Copiar datos del CSV (saltando la cabecera)
-\copy datos_temp FROM '$csv_file' WITH (FORMAT csv, HEADER true, DELIMITER ',');
-
+    # Usar \copy en un comando separado para permitir la expansión de variables
+    PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" \
+        -c "\\copy datos_temp FROM '$csv_file' WITH (FORMAT csv, HEADER true, DELIMITER ',')"
+    
+    # Insertar datos y mostrar resumen
+    PGPASSWORD="$DB_PASS" psql -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER" -d "$DB_NAME" <<EOSQL
 -- Insertar datos en la tabla de indicadores
 INSERT INTO indicadores_adicciones (zona_id, fecha, tipo_indicador, valor, descripcion)
 SELECT 
@@ -156,7 +171,7 @@ JOIN zonas_geograficas z ON z.codigo = d.zona_codigo;
 SELECT tipo_indicador, COUNT(*) as cantidad 
 FROM indicadores_adicciones 
 GROUP BY tipo_indicador;
-EOF
+EOSQL
     
     echo -e "${GREEN}Datos de ejemplo cargados correctamente${NC}"
 }
