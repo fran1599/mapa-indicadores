@@ -1,0 +1,26 @@
+zona_codigo,fecha,tipo_indicador,valor,descripcion
+AR-C,2024-01-15,consumo,125.50,Casos reportados de consumo problemático en CABA
+AR-C,2024-01-15,tratamiento,89.00,Personas en tratamiento activo
+AR-C,2024-02-01,prevencion,45.00,Talleres de prevención realizados
+AR-B,2024-01-20,consumo,342.75,Casos reportados en Provincia de Buenos Aires
+AR-B,2024-01-20,tratamiento,256.00,Personas en centros de tratamiento
+AR-B,2024-02-10,prevencion,78.00,Actividades de prevención en escuelas
+AR-X,2024-01-25,consumo,98.30,Casos reportados en Córdoba
+AR-X,2024-02-05,tratamiento,67.00,Pacientes en tratamiento
+AR-X,2024-02-15,prevencion,34.00,Campañas de concientización
+AR-S,2024-01-18,consumo,156.20,Casos en Santa Fe
+AR-S,2024-01-18,tratamiento,112.00,Tratamientos activos
+AR-M,2024-02-01,consumo,78.40,Casos en Mendoza
+AR-M,2024-02-01,tratamiento,45.00,Personas en tratamiento
+AR-T,2024-01-22,consumo,56.80,Casos en Tucumán
+AR-T,2024-02-12,prevencion,23.00,Talleres preventivos
+AR-A,2024-01-30,consumo,67.50,Casos en Salta
+AR-A,2024-02-08,tratamiento,38.00,Tratamientos en curso
+AR-E,2024-02-03,consumo,45.20,Casos en Entre Ríos
+AR-E,2024-02-03,tratamiento,28.00,Pacientes en tratamiento
+AR-H,2024-01-28,consumo,52.30,Casos reportados en Chaco
+AR-H,2024-02-18,prevencion,15.00,Actividades preventivas
+AR-W,2024-02-05,consumo,38.70,Casos en Corrientes
+AR-N,2024-01-25,tratamiento,21.00,Tratamientos en Misiones
+AR-Y,2024-02-10,prevencion,12.00,Talleres en Jujuy
+AR-Q,2024-01-15,consumo,29.50,Casos en Neuquén

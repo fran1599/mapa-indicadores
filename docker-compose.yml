@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  postgis:
+    image: postgis/postgis:15-3.3
+    container_name: gis_postgis
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-gis_adicciones}
+      POSTGRES_USER: ${POSTGRES_USER:-gisuser}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-gispassword}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgis_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - gis_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-gisuser} -d ${POSTGRES_DB:-gis_adicciones}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  geoserver:
+    image: kartoza/geoserver:2.23.0
+    container_name: gis_geoserver
+    environment:
+      GEOSERVER_ADMIN_PASSWORD: ${GEOSERVER_ADMIN_PASSWORD:-admin123}
+      GEOSERVER_DATA_DIR: /opt/geoserver/data_dir
+    ports:
+      - "8080:8080"
+    volumes:
+      - geoserver_data:/opt/geoserver/data_dir
+    networks:
+      - gis_network
+    depends_on:
+      postgis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  kepler:
+    image: crazycapivara/kepler.gl
+    container_name: gis_kepler
+    ports:
+      - "8081:80"
+    networks:
+      - gis_network
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: gis_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin@local.dev}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin123}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks:
+      - gis_network
+    depends_on:
+      postgis:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgis_data:
+  geoserver_data:
+  pgadmin_data:
+
+networks:
+  gis_network:
+    driver: bridge
