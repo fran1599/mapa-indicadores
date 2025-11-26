@@ -55,7 +55,7 @@ services:
     ports:
       - "8888:8888"
     command: >
-      bash -c "pip install leafmap geopandas sqlalchemy psycopg2-binary folium mapclassify &&
+      bash -c "pip install leafmap geopandas sqlalchemy psycopg2-binary folium mapclassify geoalchemy2  &&
                start-notebook.sh --NotebookApp.token='' --NotebookApp.password=''"
     depends_on:
       postgis:
