@@ -1,52 +1,52 @@
-localidad,fecha,tipo_indicador,subtipo,valor,descripcion
-Córdoba,2024-01-15,consumo,alcohol,156,Consultas por consumo problemático de alcohol
-Córdoba,2024-01-20,consumo,drogas,89,Consultas por consumo de sustancias psicoactivas
-Córdoba,2024-02-01,tratamiento,ambulatorio,234,Pacientes en tratamiento ambulatorio activo
-Córdoba,2024-02-15,tratamiento,internacion,45,Pacientes en internación por adicciones
-Córdoba,2024-03-01,prevencion,talleres,28,Talleres de prevención realizados en escuelas
-Córdoba,2024-03-10,consulta,orientacion,312,Consultas de orientación familiar
-Río Cuarto,2024-01-15,consumo,alcohol,78,Consultas por consumo problemático de alcohol
-Río Cuarto,2024-01-25,tratamiento,ambulatorio,112,Pacientes en tratamiento ambulatorio
-Río Cuarto,2024-02-10,prevencion,charlas,15,Charlas preventivas en instituciones
-Río Cuarto,2024-02-28,consulta,primera_vez,67,Primeras consultas de pacientes nuevos
-Villa María,2024-01-18,consumo,drogas,45,Consultas por consumo de sustancias
-Villa María,2024-02-05,tratamiento,ambulatorio,89,Pacientes en seguimiento ambulatorio
-Villa María,2024-02-20,prevencion,talleres,12,Talleres de prevención en barrios
-Villa María,2024-03-15,consulta,seguimiento,156,Consultas de seguimiento de pacientes
-San Francisco,2024-01-22,consumo,alcohol,34,Consultas por consumo de alcohol
-San Francisco,2024-02-12,tratamiento,ambulatorio,56,Pacientes en tratamiento activo
-San Francisco,2024-03-05,prevencion,capacitacion,8,Capacitaciones a profesionales de salud
-Carlos Paz,2024-01-28,consumo,drogas,23,Consultas por consumo de sustancias
-Carlos Paz,2024-02-18,tratamiento,internacion,12,Pacientes derivados a internación
-Carlos Paz,2024-03-08,consulta,orientacion,45,Consultas de orientación
-Alta Gracia,2024-01-30,consumo,alcohol,28,Consultas por consumo de alcohol
-Alta Gracia,2024-02-25,tratamiento,ambulatorio,34,Pacientes en tratamiento
-Alta Gracia,2024-03-12,prevencion,talleres,6,Talleres preventivos realizados
-Jesús María,2024-02-01,consumo,drogas,18,Consultas por consumo de sustancias
-Jesús María,2024-02-20,tratamiento,ambulatorio,28,Pacientes en seguimiento
-Jesús María,2024-03-15,consulta,primera_vez,22,Primeras consultas
-Bell Ville,2024-01-25,consumo,alcohol,25,Consultas por consumo de alcohol
-Bell Ville,2024-02-15,tratamiento,ambulatorio,38,Pacientes en tratamiento activo
-Bell Ville,2024-03-10,prevencion,charlas,5,Charlas preventivas
-Cruz del Eje,2024-02-05,consumo,drogas,15,Consultas por consumo de sustancias
-Cruz del Eje,2024-02-28,tratamiento,ambulatorio,22,Pacientes en tratamiento
-Cruz del Eje,2024-03-20,consulta,orientacion,18,Consultas de orientación familiar
-Villa Dolores,2024-01-20,consumo,alcohol,20,Consultas por consumo de alcohol
-Villa Dolores,2024-02-10,tratamiento,ambulatorio,28,Pacientes en seguimiento
-Villa Dolores,2024-03-05,prevencion,talleres,4,Talleres en comunidades rurales
-Marcos Juárez,2024-02-01,consumo,alcohol,16,Consultas por consumo de alcohol
-Marcos Juárez,2024-02-22,tratamiento,ambulatorio,24,Pacientes en tratamiento
-Marcos Juárez,2024-03-18,consulta,seguimiento,32,Consultas de seguimiento
-Deán Funes,2024-01-28,consumo,drogas,12,Consultas por consumo de sustancias
-Deán Funes,2024-02-18,tratamiento,ambulatorio,18,Pacientes en tratamiento activo
-La Carlota,2024-02-08,consumo,alcohol,8,Consultas por consumo de alcohol
-La Carlota,2024-03-01,prevencion,charlas,3,Charlas preventivas
-Laboulaye,2024-01-15,consumo,alcohol,10,Consultas por consumo de alcohol
-Laboulaye,2024-02-25,tratamiento,ambulatorio,15,Pacientes en tratamiento
-Río Tercero,2024-01-22,consumo,drogas,22,Consultas por consumo de sustancias
-Río Tercero,2024-02-12,tratamiento,ambulatorio,35,Pacientes en tratamiento activo
-Río Tercero,2024-03-08,prevencion,talleres,7,Talleres de prevención realizados
-Cosquín,2024-02-05,consumo,alcohol,14,Consultas por consumo de alcohol
-Cosquín,2024-02-28,consulta,orientacion,25,Consultas de orientación
-La Calera,2024-01-30,consumo,drogas,18,Consultas por consumo de sustancias
-La Calera,2024-02-20,tratamiento,ambulatorio,28,Pacientes en tratamiento
+localidad,fecha,tipo_indicador,subtipo,valor,descripcion,latitud,longitud
+Córdoba,2024-01-15,consumo,alcohol,156,Consultas por consumo problemático de alcohol,-31.4201,-64.1888
+Córdoba,2024-01-20,consumo,drogas,89,Consultas por consumo de sustancias psicoactivas,-31.4201,-64.1888
+Córdoba,2024-02-01,tratamiento,ambulatorio,234,Pacientes en tratamiento ambulatorio activo,-31.4201,-64.1888
+Córdoba,2024-02-15,tratamiento,internacion,45,Pacientes en internación por adicciones,-31.4201,-64.1888
+Córdoba,2024-03-01,prevencion,talleres,28,Talleres de prevención realizados en escuelas,-31.4201,-64.1888
+Córdoba,2024-03-10,consulta,orientacion,312,Consultas de orientación familiar,-31.4201,-64.1888
+Río Cuarto,2024-01-15,consumo,alcohol,78,Consultas por consumo problemático de alcohol,-33.1307,-64.3499
+Río Cuarto,2024-01-25,tratamiento,ambulatorio,112,Pacientes en tratamiento ambulatorio,-33.1307,-64.3499
+Río Cuarto,2024-02-10,prevencion,charlas,15,Charlas preventivas en instituciones,-33.1307,-64.3499
+Río Cuarto,2024-02-28,consulta,primera_vez,67,Primeras consultas de pacientes nuevos,-33.1307,-64.3499
+Villa María,2024-01-18,consumo,drogas,45,Consultas por consumo de sustancias,-32.4074,-63.2429
+Villa María,2024-02-05,tratamiento,ambulatorio,89,Pacientes en seguimiento ambulatorio,-32.4074,-63.2429
+Villa María,2024-02-20,prevencion,talleres,12,Talleres de prevención en barrios,-32.4074,-63.2429
+Villa María,2024-03-15,consulta,seguimiento,156,Consultas de seguimiento de pacientes,-32.4074,-63.2429
+San Francisco,2024-01-22,consumo,alcohol,34,Consultas por consumo de alcohol,-31.4281,-62.0828
+San Francisco,2024-02-12,tratamiento,ambulatorio,56,Pacientes en tratamiento activo,-31.4281,-62.0828
+San Francisco,2024-03-05,prevencion,capacitacion,8,Capacitaciones a profesionales de salud,-31.4281,-62.0828
+Carlos Paz,2024-01-28,consumo,drogas,23,Consultas por consumo de sustancias,-31.4241,-64.4979
+Carlos Paz,2024-02-18,tratamiento,internacion,12,Pacientes derivados a internación,-31.4241,-64.4979
+Carlos Paz,2024-03-08,consulta,orientacion,45,Consultas de orientación,-31.4241,-64.4979
+Alta Gracia,2024-01-30,consumo,alcohol,28,Consultas por consumo de alcohol,-31.6596,-64.4298
+Alta Gracia,2024-02-25,tratamiento,ambulatorio,34,Pacientes en tratamiento,-31.6596,-64.4298
+Alta Gracia,2024-03-12,prevencion,talleres,6,Talleres preventivos realizados,-31.6596,-64.4298
+Jesús María,2024-02-01,consumo,drogas,18,Consultas por consumo de sustancias,-30.9816,-64.0953
+Jesús María,2024-02-20,tratamiento,ambulatorio,28,Pacientes en seguimiento,-30.9816,-64.0953
+Jesús María,2024-03-15,consulta,primera_vez,22,Primeras consultas,-30.9816,-64.0953
+Bell Ville,2024-01-25,consumo,alcohol,25,Consultas por consumo de alcohol,-32.6277,-62.6889
+Bell Ville,2024-02-15,tratamiento,ambulatorio,38,Pacientes en tratamiento activo,-32.6277,-62.6889
+Bell Ville,2024-03-10,prevencion,charlas,5,Charlas preventivas,-32.6277,-62.6889
+Cruz del Eje,2024-02-05,consumo,drogas,15,Consultas por consumo de sustancias,-30.7269,-64.8063
+Cruz del Eje,2024-02-28,tratamiento,ambulatorio,22,Pacientes en tratamiento,-30.7269,-64.8063
+Cruz del Eje,2024-03-20,consulta,orientacion,18,Consultas de orientación familiar,-30.7269,-64.8063
+Villa Dolores,2024-01-20,consumo,alcohol,20,Consultas por consumo de alcohol,-31.9442,-65.1890
+Villa Dolores,2024-02-10,tratamiento,ambulatorio,28,Pacientes en seguimiento,-31.9442,-65.1890
+Villa Dolores,2024-03-05,prevencion,talleres,4,Talleres en comunidades rurales,-31.9442,-65.1890
+Marcos Juárez,2024-02-01,consumo,alcohol,16,Consultas por consumo de alcohol,-32.6908,-62.1057
+Marcos Juárez,2024-02-22,tratamiento,ambulatorio,24,Pacientes en tratamiento,-32.6908,-62.1057
+Marcos Juárez,2024-03-18,consulta,seguimiento,32,Consultas de seguimiento,-32.6908,-62.1057
+Deán Funes,2024-01-28,consumo,drogas,12,Consultas por consumo de sustancias,-30.4268,-64.3507
+Deán Funes,2024-02-18,tratamiento,ambulatorio,18,Pacientes en tratamiento activo,-30.4268,-64.3507
+La Carlota,2024-02-08,consumo,alcohol,8,Consultas por consumo de alcohol,-33.4178,-63.2967
+La Carlota,2024-03-01,prevencion,charlas,3,Charlas preventivas,-33.4178,-63.2967
+Laboulaye,2024-01-15,consumo,alcohol,10,Consultas por consumo de alcohol,-34.1269,-63.3911
+Laboulaye,2024-02-25,tratamiento,ambulatorio,15,Pacientes en tratamiento,-34.1269,-63.3911
+Río Tercero,2024-01-22,consumo,drogas,22,Consultas por consumo de sustancias,-32.1737,-64.1144
+Río Tercero,2024-02-12,tratamiento,ambulatorio,35,Pacientes en tratamiento activo,-32.1737,-64.1144
+Río Tercero,2024-03-08,prevencion,talleres,7,Talleres de prevención realizados,-32.1737,-64.1144
+Cosquín,2024-02-05,consumo,alcohol,14,Consultas por consumo de alcohol,-31.2436,-64.4664
+Cosquín,2024-02-28,consulta,orientacion,25,Consultas de orientación,-31.2436,-64.4664
+La Calera,2024-01-30,consumo,drogas,18,Consultas por consumo de sustancias,-31.3439,-64.3347
+La Calera,2024-02-20,tratamiento,ambulatorio,28,Pacientes en tratamiento,-31.3439,-64.3347
