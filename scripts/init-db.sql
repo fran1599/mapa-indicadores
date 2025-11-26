@@ -238,6 +238,10 @@ GROUP BY z.id, z.codigo, z.nombre, z.geom, dc.poblacion_total;
 -- ============================================================================
 -- DATOS INICIALES DE EJEMPLO
 -- ============================================================================
+-- NOTA: Las geometrías incluidas son aproximaciones rectangulares simplificadas
+-- para propósitos de demostración. Para uso en producción, reemplazar con
+-- geometrías reales obtenidas de fuentes oficiales (IGN, cartografía provincial).
+-- ============================================================================
 
 -- ============================================================================
 -- 1. PROVINCIA CÓRDOBA
@@ -247,6 +251,7 @@ INSERT INTO zonas_geograficas (codigo, nombre, tipo, codigo_padre, geom) VALUES
 
 -- ============================================================================
 -- 2. DEPARTAMENTOS (26)
+-- Geometrías simplificadas - reemplazar con datos oficiales para producción
 -- ============================================================================
 INSERT INTO zonas_geograficas (codigo, nombre, tipo, codigo_padre, geom) VALUES
 ('14007', 'Capital', 'departamento', 'AR-X', ST_Multi(ST_GeomFromText('POLYGON((-64.30 -31.30, -64.30 -31.50, -64.10 -31.50, -64.10 -31.30, -64.30 -31.30))', 4326))),
@@ -278,6 +283,7 @@ INSERT INTO zonas_geograficas (codigo, nombre, tipo, codigo_padre, geom) VALUES
 
 -- ============================================================================
 -- 3. REGIONES SANITARIAS (14)
+-- Geometrías simplificadas - reemplazar con datos oficiales para producción
 -- ============================================================================
 INSERT INTO zonas_geograficas (codigo, nombre, tipo, codigo_padre, geom) VALUES
 ('RS01', 'Región Sanitaria Capital', 'region_sanitaria', 'AR-X', ST_Multi(ST_GeomFromText('POLYGON((-64.35 -31.25, -64.35 -31.55, -64.05 -31.55, -64.05 -31.25, -64.35 -31.25))', 4326))),
