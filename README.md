@@ -55,6 +55,24 @@ chmod +x scripts/cargar_datos.sh
 
 > 💡 **Recomendado**: Para análisis avanzado usá Jupyter + Leafmap en http://localhost:8888 (sin token, acceso directo)
 
+## 🚀 Inicio Rápido con Jupyter
+
+1. Acceder a Jupyter: http://localhost:8888
+2. Abrir la carpeta `notebooks/`
+3. Ejecutar los notebooks en orden:
+   - `01_inicio_rapido.ipynb` - Mapa básico de Córdoba
+   - `02_mapa_calor.ipynb` - Mapas de calor con indicadores
+   - `03_analisis_por_zona.ipynb` - Análisis por departamento y región
+
+### Archivos de datos disponibles
+
+| Archivo | Descripción |
+|---------|-------------|
+| `data/ejemplo_indicadores.csv` | Indicadores con coordenadas (listo para mapas de calor) |
+| `data/cordoba/localidades.csv` | 56 localidades de Córdoba con lat/lon |
+| `data/cordoba/departamentos.geojson` | 26 departamentos (polígonos) |
+| `data/cordoba/regiones_sanitarias.geojson` | 14 regiones sanitarias |
+
 ## 🔐 Credenciales por Defecto
 
 ### pgAdmin
@@ -96,8 +114,9 @@ chmod +x scripts/cargar_datos.sh
 ├── notebooks/
 │   ├── 01_inicio_rapido.ipynb        # Inicio rápido con Leafmap
 │   ├── 02_mapa_calor.ipynb           # Crear mapas de calor
-│   ├── 03_conexion_postgis.ipynb     # Conectar con PostGIS
-│   └── 04_cruce_datos.ipynb          # Análisis de datos
+│   ├── 03_analisis_por_zona.ipynb    # Análisis por departamento y región
+│   ├── 04_conexion_postgis.ipynb     # Conectar con PostGIS
+│   └── 05_cruce_datos.ipynb          # Análisis de datos
 │
 ├── webapp/
 │   ├── index.html              # Aplicación web con Leaflet
@@ -193,8 +212,9 @@ docker exec -it gis_postgis psql -U gisuser -d gis_adicciones -c \
 **Notebooks disponibles:**
 - `01_inicio_rapido.ipynb`: Introducción a Leafmap
 - `02_mapa_calor.ipynb`: Crear mapas de calor
-- `03_conexion_postgis.ipynb`: Conectar con la base de datos
-- `04_cruce_datos.ipynb`: Análisis cruzando datos censales
+- `03_analisis_por_zona.ipynb`: Análisis por departamento y región
+- `04_conexion_postgis.ipynb`: Conectar con la base de datos
+- `05_cruce_datos.ipynb`: Análisis cruzando datos censales
 
 ### Opción 2: Webapp Leaflet (Sin configuración)
 
